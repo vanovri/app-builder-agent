@@ -131,6 +131,8 @@ class AppBuilder:
                               f"pytest -q\n```\n\n## Endpoints\n" + "\n".join(f"- `{e.get('method')} {e.get('path')}` {e.get('description', '')}"
                                                                             for e in spec.get("endpoints", [])) + "\n")
         ws = self.out_root / slug
+        if ws.exists() and not b.passed:
+            ws = self.out_root / f"{slug}-failed-{int(time.time())}"
         if ws.exists():
             shutil.rmtree(ws)
         write_files(ws, files)
